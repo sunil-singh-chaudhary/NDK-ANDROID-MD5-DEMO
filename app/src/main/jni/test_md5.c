@@ -1,18 +1,15 @@
-/**
- * 基于c语言的md5加密
- */
 #include <android/log.h>
 #include <jni.h>
 #include <stdio.h>
 #include <string.h>
 #include "md5.h"
 #define TAG "MY_TAG"
-// md5加密
+
 JNIEXPORT jstring JNICALL Java_com_example_testmd5_MainActivity_encryptByMD5(JNIEnv *env, jclass obj, jstring strText)
 {
 
-	jstring strText1="SUNIL";
-	__android_log_print(ANDROID_LOG_VERBOSE, TAG, "%s",strText);
+
+	//__android_log_print(ANDROID_LOG_VERBOSE, TAG, "%s",strText);
 	char* szText = (char*)(*env)->GetStringUTFChars(env, strText, 0);
 
 

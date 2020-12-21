@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // java语言md5加密
+    // java MD5
     public String getMD5(String info) {
         try {
             MessageDigest md5 = MessageDigest.getInstance( "MD5" );
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // ndk c语言md5加密
+    // ndk MD5
     public native String encryptByMD5(String strText);
 
     static {
