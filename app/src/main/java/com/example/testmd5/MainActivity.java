@@ -2,8 +2,9 @@ package com.example.testmd5;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,90 +13,72 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
+    EditText edit_enter_text;
+    TextView android_md5_textv, ndk_md5_textv;
+    String entereText;
+    Button generate_btn;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
 
-        // 待加密
-        String strText = "ANKIT JAIN ANKIT JAIN ANKIT JAIN ANKIT JAIN";
+        edit_enter_text = findViewById( R.id.edit_enter_text );
+        generate_btn=findViewById( R.id.generate_btn );
+        android_md5_textv = findViewById( R.id.java_md5_textv );
+        ndk_md5_textv = findViewById( R.id.ndk_md5_textv );
 
 
-        // java
-        TextView testTextView1 = (TextView)findViewById(R.id.testTextView1);
-        testTextView1.setText(getMD5(strText));
-        Log.e("JAVA TRNSLATE--",getMD5(strText)+"");
-        // ndk c
-        TextView testTextView2 = (TextView)findViewById(R.id.testTextView2);
-        testTextView2.setText( encryptByMD5(strText));
-        Log.e("NDK TRNSLATE--",encryptByMD5(strText)+"");
+        generate_btn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entereText=edit_enter_text.getText().toString();
+
+                //android
+                android_md5_textv.setText( getMD5( entereText ) );
+                Log.e( "ANDROID --", getMD5( entereText ) );
+                android_md5_textv.setText( "ANDROID-"+ getMD5( entereText ));
+
+                // ndk c
+                ndk_md5_textv.setText( encryptByMD5( entereText ) );
+                Log.e( "NDK --", encryptByMD5( entereText ) + "" );
+                ndk_md5_textv.setText( "NDK-"+ encryptByMD5( entereText ));
+            }
+        } );
+
+
     }
 
     // java语言md5加密
-    public String getMD5(String info)
-    {
-        try
-        {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(info.getBytes("UTF-8"));
+    public String getMD5(String info) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance( "MD5" );
+            md5.update( info.getBytes( "UTF-8" ) );
             byte[] encryption = md5.digest();
 
             StringBuffer strBuf = new StringBuffer();
-            for (int i = 0; i < encryption.length; i++)
-            {
-                if (Integer.toHexString(0xff & encryption[i]).length() == 1)
-                {
-                    strBuf.append("0").append(Integer.toHexString(0xff & encryption[i]));
-                }
-                else
-                {
-                    strBuf.append(Integer.toHexString(0xff & encryption[i]));
+            for (int i = 0; i < encryption.length; i++) {
+                if (Integer.toHexString( 0xff & encryption[i] ).length() == 1) {
+                    strBuf.append( "0" ).append( Integer.toHexString( 0xff & encryption[i] ) );
+                } else {
+                    strBuf.append( Integer.toHexString( 0xff & encryption[i] ) );
                 }
             }
 
             return strBuf.toString();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             return "";
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             return "";
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings)
-        {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     // ndk c语言md5加密
     public native String encryptByMD5(String strText);
 
-    static
-    {
-        System.loadLibrary("CTestMD5");
+    static {
+        System.loadLibrary( "CTestMD5" );
     }
 }
